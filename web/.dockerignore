@@ -1,0 +1,7 @@
+node_modules
+target
+test
+.env
+.gitignore
+.eslintrc.json
+Dockerfile**

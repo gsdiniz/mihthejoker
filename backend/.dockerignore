@@ -1,0 +1,10 @@
+node_modules
+target
+test
+docker-compose.yaml
+.env
+.gitignore
+.eslintrc.json
+Dockerfile
+logs
+uploads

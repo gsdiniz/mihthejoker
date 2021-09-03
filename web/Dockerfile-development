@@ -1,0 +1,26 @@
+FROM node:12-alpine
+
+ENV NODE_ENV=development API=
+
+RUN apk add --update --no-cache tar unzip curl \
+   && addgroup -g 1001 app \
+   && adduser -s /sbin/nologin -u 1001 -G app -D app \
+   && mkdir -p /usr/share/nginx/html \
+   && chmod g+rwx -R /usr/share/nginx/html
+
+WORKDIR /usr/share/nginx/html
+
+COPY ./package*.json ./
+RUN yarn install
+
+COPY ./ .
+
+RUN chown app:app /usr/share/nginx/html -R
+
+USER app
+
+VOLUME /usr/share/nginx/html/node_modules
+
+EXPOSE 3000
+
+CMD yarn start

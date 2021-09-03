@@ -1,0 +1,84 @@
+version: "3.8"
+services:
+  mihhTheJoker-mongo:
+    image: mongo
+    container_name: mihhTheJoker-mongo
+    volumes: 
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mihhTheJoker-mongo-express:
+    depends_on: 
+      - mihhTheJoker-mongo
+    image: mongo-express
+    container_name: mihhTheJoker-mongo-express
+    ports:
+      - 8091:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: mihhTheJoker-mongo
+
+  mihhTheJoker-mailhog:
+    depends_on: 
+      - mihhTheJoker-mongo
+    image: mailhog/mailhog
+    container_name: mihhTheJoker-mailhog
+    ports:
+      - 8092:8025
+    environment:
+      MH_STORAGE: mongodb
+      MH_MONGO_COLLECTION: messages
+      MH_MONGO_URI: "root:example@mihhTheJoker-mongo:27017"
+      MH_MONGO_DB: mailhog
+
+  mihhTheJoker-backend:
+    image: mih-backend
+    depends_on: 
+      - mihhTheJoker-web
+    container_name: mihhTheJoker-backend
+    volumes: 
+      - ${PWD}/uploads:/opt/app/uploads
+      - ${PWD}/backend/src:/opt/app/src
+    ports: 
+      - 8095:8081
+    build: 
+      context: ./backend
+    environment: 
+      NODE_ENV: "${NODE_ENV}"
+      CORS: ${CORS:-*}
+      PORT: 8081
+      HOST: http://localhost:8090
+      MAIL_FROM: ${MAIL_FROM:-no-reply@3dtour.com}
+      MAIL_PORT: ${MAIL_PORT:-1025}
+      MAIL_HOST: ${MAIL_HOST:-mihhTheJoker-mailhog}
+      DB_SCHEMA: mongodb
+      DB_USER: root
+      DB_PASS: example
+      DB_HOST: mihhTheJoker-mongo
+      DB_NAME: app-mihhTheJoker
+      DB_PORT: 27017
+      JWT_ALGO: 
+      JWT_SECRET: senhaJwt
+
+  mihhTheJoker-web:
+    image: mih-web
+    user: app
+    build: 
+      context: ./web
+      dockerfile: Dockerfile-${NODE_ENV}
+    depends_on: 
+      - mihhTheJoker-mongo-express
+      - mihhTheJoker-mailhog
+    container_name: mihhTheJoker-web
+    volumes: 
+      - ${PWD}/web/src:/usr/share/nginx/html/src
+      - ${PWD}/uploads:/usr/share/nginx/html/uploads
+    ports:
+      - 8090:3000
+
+volumes:
+  mongo_data:
+    name: mihhTheJoker-mongo_data
