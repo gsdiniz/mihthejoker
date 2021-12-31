@@ -52,8 +52,8 @@ const Login = (props) => {
     }
 
     useEffect(() => {
-        document.title = `MihTheJoker 3D Tour - Login`;
-        document.head.querySelector('meta[name=description]').content = 'Personal App';
+        document.title = `Login - MUSEu Pessoal Virtual`;
+        document.head.querySelector('meta[name=description]').content = 'MUSEu Pessoal Virtual';
 
         async function checkPayload() {
             loading.open()

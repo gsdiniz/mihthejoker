@@ -1,6 +1,6 @@
 const Router = require('express').Router()
-const AllowListRepository = require('../../domain/v1/Login/AllowListRepository')
-const BlockListRepository = require('../../domain/v1/Login/BlockListRepository')
+const AllowListRepository = require('../../domain/Login/AllowListRepository')
+const BlockListRepository = require('../../domain/Login/BlockListRepository')
 const { body } = require('express-validator');
 
 const passwordRules = {
@@ -11,10 +11,8 @@ const passwordRules = {
   minSymbols: 1,
 }
 
-
 module.exports = (expressApp) => {
-
-  const LoginDomain = expressApp.domain.v1.Login.index
+  const LoginDomain = expressApp.domain.Login.index
 
   const loginResource = new LoginDomain.resource(
     new LoginDomain.service( 

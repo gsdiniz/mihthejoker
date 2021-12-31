@@ -10,16 +10,12 @@ RUN apk add --update --no-cache tar unzip curl \
 
 WORKDIR /usr/share/nginx/html
 
-COPY ./package*.json ./
-RUN yarn install
-
-COPY ./ .
-
-RUN chown app:app /usr/share/nginx/html -R
-
-USER app
+ADD ./package*.json ./
+ADD ./ .
+RUN yarn install && chown app:app /usr/share/nginx/html -R
 
 VOLUME /usr/share/nginx/html/node_modules
+# USER app
 
 EXPOSE 3000
 

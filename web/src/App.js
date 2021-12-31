@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.scss';
+import './App.css';
 import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css'
 import { BrowserRouter as Router } from "react-router-dom";
 import { SnackbarProvider } from 'notistack';
@@ -9,15 +9,15 @@ import LoadingProvider from './app/hooks/loading/LoadingProvider';
 
 function App() {
   return (
-    <LoadingProvider>
-      <SnackbarProvider maxSnack={3}>
-        <Router>
-          <AuthProvider>
+    <SnackbarProvider maxSnack={3}>
+      <Router>
+        <AuthProvider>
+          <LoadingProvider>
             <Rotas />
-          </AuthProvider>
-        </Router>
-      </SnackbarProvider>
-    </LoadingProvider>
+          </LoadingProvider>
+        </AuthProvider>
+      </Router>
+    </SnackbarProvider>
   );
 }
 

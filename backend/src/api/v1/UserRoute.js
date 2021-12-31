@@ -11,7 +11,7 @@ const passwordRules = {
 
 module.exports = (expressApp) => {
 
-  const UserDomain = expressApp.domain.v1.User.index
+  const UserDomain = expressApp.domain.User.index
   const userResource = new UserDomain.resource (
     new UserDomain.service (
       new UserDomain.repository (expressApp.mongoDB.model('User')),

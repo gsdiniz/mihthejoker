@@ -15,8 +15,8 @@ const styles = theme => ({
 const Page = (props) => {
     const { classes, pageName } = props
     useEffect(() => {
-        document.title = `Personal App - ${pageName}`;
-        document.head.querySelector('meta[name=description]').content = 'Personal App - ' + pageName;
+        document.title = `MUSE - ${pageName}`;
+        document.head.querySelector('meta[name=description]').content = 'MUSE - ' + pageName;
     }, [pageName])
 
     return (

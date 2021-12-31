@@ -105,7 +105,7 @@ function Navigator(props) {
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
         <ListItem className={clsx(classes.firebase, classes.item, classes.itemCategory)}>
-          3D Visitation
+          MUSE
         </ListItem>
         <ListItem
           button

@@ -27,7 +27,7 @@ const upload = (expressApp) => (filetypes, limits = { files: 1, fieldSize: 1024 
     storage,
     limits,
     fileFilter: (req, file, cb) => {
-      const extname =  filetypes.test(path.extname(file.originalname).toLowerCase());
+      const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
       const mimetype = filetypes.test(file.mimetype);
 
       if(mimetype && extname){

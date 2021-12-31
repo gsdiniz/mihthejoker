@@ -15,10 +15,8 @@ class API {
   }
 
   _loadTokens() {
-    const access = localStorage.getItem('accessToken')
-    const refresh = localStorage.getItem('refreshToken')
-    this._accessToken = access ? access : null
-    this._refreshToken = refresh ? refresh : null
+    this._accessToken = localStorage.getItem('accessToken') || null
+    this._refreshToken = localStorage.getItem('refreshToken') || null
   }
 
   _handleAuthHeaders = (headers = {}) => {
@@ -26,6 +24,24 @@ class API {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${this._accessToken}`
     }, {...headers})
+  }
+
+  _buildFormData (registro) {
+    let formData = new FormData()
+
+    for (let prop in registro) {
+
+      if (registro[prop] instanceof Array) {
+        registro[prop].forEach((reg) => {
+          formData.append(prop, reg)
+        })
+        continue
+      }
+
+      formData.append(prop, registro[prop])
+    }
+
+    return formData
   }
 
   async _handleResponse (resp) {

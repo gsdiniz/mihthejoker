@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Fragment, useMemo, useState } from 'react'
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import LoadingContext from './LoadingContext';
 
@@ -15,17 +15,20 @@ const LoadingProvider = (props) => {
     const open = () => setShowBackdrop(true)
     const close = () => setShowBackdrop(false)
 
+    const value = useMemo(() => ({
+      open,
+      close
+    }), [])
+
     return (
       <LoadingContext.Provider 
-          value={{
-            open,
-            close,
-            current: showBackdrop
-          }} >
-          <Backdrop open={showBackdrop}  className={classes.backdropCss}>
-            <CircularProgress color="inherit" />
-          </Backdrop> 
-          {props.children}
+          value={value} >
+          <Fragment>
+            {props.children}
+            <Backdrop open={showBackdrop}  className={classes.backdropCss}>
+              <CircularProgress color="inherit" />
+            </Backdrop> 
+          </Fragment>
       </LoadingContext.Provider>
   )
 }

@@ -16,7 +16,8 @@ const operations = {
     own: 'deleteOwn',
   },
 }
-const controleDeAcesso = (expressApp) => (recurso, acao) => (req, res, next) => {
+
+module.exports = (expressApp) => (recurso, acao) => (req, res, next) => {
   const permissionsByRole = expressApp.helpers.autorizacao.config.can(
     expressApp.helpers.autorizacao.roles.getRoleLabelByCode(req.user.role)
   )
@@ -43,6 +44,4 @@ const controleDeAcesso = (expressApp) => (recurso, acao) => (req, res, next) => 
   }
 
   next()
-} 
-
-module.exports = (expressApp) => controleDeAcesso(expressApp)
+}

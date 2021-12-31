@@ -37,7 +37,7 @@ services:
   mihhTheJoker-backend:
     image: mih-backend
     depends_on: 
-      - mihhTheJoker-web
+      - mihhTheJoker-mongo
     container_name: mihhTheJoker-backend
     volumes: 
       - ${PWD}/uploads:/opt/app/uploads
@@ -47,11 +47,11 @@ services:
     build: 
       context: ./backend
     environment: 
-      NODE_ENV: "${NODE_ENV}"
+      NODE_ENV: ${NODE_ENV}
       CORS: ${CORS:-*}
       PORT: 8081
-      HOST: http://localhost:8090
-      MAIL_FROM: ${MAIL_FROM:-no-reply@3dtour.com}
+      HOST: http://localhost:8090/api
+      MAIL_FROM: ${MAIL_FROM:-no-reply@muse.com}
       MAIL_PORT: ${MAIL_PORT:-1025}
       MAIL_HOST: ${MAIL_HOST:-mihhTheJoker-mailhog}
       DB_SCHEMA: mongodb
@@ -62,17 +62,23 @@ services:
       DB_PORT: 27017
       JWT_ALGO: 
       JWT_SECRET: senhaJwt
+      UPLOAD_VIEW: http://localhost:8090/api/exposicao/visitar/video
+    extra_hosts:
+      - "api.nodemailer.com:13.49.22.0"
 
   mihhTheJoker-web:
     image: mih-web
-    user: app
     build: 
       context: ./web
-      dockerfile: Dockerfile-${NODE_ENV}
+      dockerfile: ${DOCKERFILE_BUILD:-Dockerfile}
     depends_on: 
       - mihhTheJoker-mongo-express
       - mihhTheJoker-mailhog
+      - mihhTheJoker-backend
     container_name: mihhTheJoker-web
+    environment: 
+      NODE_ENV: ${NODE_ENV}
+      API: http://localhost:8090/api/v1
     volumes: 
       - ${PWD}/web/src:/usr/share/nginx/html/src
       - ${PWD}/uploads:/usr/share/nginx/html/uploads

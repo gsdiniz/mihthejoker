@@ -1,23 +1,32 @@
+import { useCallback, useMemo } from "react";
 import { useHistory } from "react-router";
 import useFeedback from "../useFeedback";
 
-function useApi(apiObject) {
+export default function useApi(apiObject) {
   const { showError } = useFeedback()
   const history = useHistory()
 
-  const fetch = async (method, dataToManipulate) => {
-    const isLogged = await apiObject.refreshToken()
-    if (isLogged) {
-      return apiObject[method](dataToManipulate)
+  const fetch = useCallback((method, dataToManipulate) => {
+    return new Promise ((resolve, reject) => {
+      apiObject.refreshToken()
+        .then(isLogged => {
+          if (isLogged) {
+            apiObject[method](dataToManipulate).then(resolve).catch(reject)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          history.push('/login')
+        }) 
+    })
+  }, [apiObject, history])
+
+
+  const api = useMemo(() => (
+    {
+      fetch
     }
-    showError('Faça login novamente')
-    history.push('/login')
-    return false
-  }
+  ), [fetch])
 
-  return ({
-    fetch
-  })
+  return api
 }
-
-export default useApi

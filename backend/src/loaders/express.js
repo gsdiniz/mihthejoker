@@ -1,5 +1,6 @@
 const config = require('../config')
 const path = require('path')
+const express = require('express')
 const bodyParser = require('body-parser')
 const consign = require('consign')
 const helmet = require('helmet')
@@ -13,11 +14,10 @@ module.exports = async (expressApp) => {
   expressApp.use(helmet.hidePoweredBy({ setTo: 'PHP 7.1.29' }))
 
   // MIDDLEWARES
-  // app.use(express.static(path.join(__dirname, '../public')))
   // expressApp.set('view engine', 'ejs')
   // expressApp.set('views', path.join(__dirname, '../views'))
-  expressApp.use(bodyParser.urlencoded({ extended: true }))
-  expressApp.use(bodyParser.json())
+  expressApp.use(express.urlencoded({ extended: true }))
+  expressApp.use(express.json())
 
   // PARA BROWSERS QUE NÃO ACEITAM METHODS DIFERENTES DOS USUAIS
   expressApp.use(require('method-override')())
@@ -25,14 +25,17 @@ module.exports = async (expressApp) => {
   // CORS
   expressApp.use(cors(config.cors))
 
+  if (!config.isProduction) {
+    expressApp.use('/uploads', express.static(path.join(__dirname, '../../uploads')))
+  }
+
   // Load-Automático
   consign({ cwd: path.join(__dirname, '../.'), verbose: !config.isProduction })
     .include('helpers')
-    .then('jobs')
     .then('middlewares')
-    .then('subscribers')
-    .then('domain/v1/Login/index.js')
-    .then('domain/v1/User/index.js')
+    .then('domain/Login/index.js')
+    .then('domain/User/index.js')
+    .then('domain/Exposicao')
     .into(expressApp)
 
   return expressApp

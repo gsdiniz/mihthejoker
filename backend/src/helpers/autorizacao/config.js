@@ -7,17 +7,17 @@ module.exports = () => {
     .grant(
       Roles.getRoleLabelByCode(Roles.VISITANTE)
     )
-    .readAny('tour')
+    .readAny('exposicao')
     .readOwn('user')
     .updateOwn('user')
     .deleteOwn('user')
 
   controle
     .grant(Roles.getRoleLabelByCode(Roles.EXPOSITOR))
-    .readOwn('tour')
-    .createOwn('tour')
-    .updateOwn('tour')
-    .deleteOwn('tour')
+    .readOwn('exposicao')
+    .createOwn('exposicao')
+    .updateOwn('exposicao')
+    .deleteOwn('exposicao')
     .readOwn('user')
     .updateOwn('user')
     .deleteOwn('user')

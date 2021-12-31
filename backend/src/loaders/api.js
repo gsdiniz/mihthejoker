@@ -1,7 +1,6 @@
 const LOG = require('./winston')
 
 module.exports = async (expressApp) => {
-
   expressApp.middlewares.passport.strategiesForAuth(
     expressApp.mongoDB.model('User'),
     expressApp.mongoDB.model('BlockList')

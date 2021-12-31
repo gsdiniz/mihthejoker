@@ -115,26 +115,6 @@ const FormRegister = (props) => {
         />
       </FormControl>
 
-      {/* <FormControl fullWidth>
-        <TextField label="CPF"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          inputProps={
-            {
-              pattern: "[0-9]{11}",
-              title: 'Informe o CPF, apenas dígitos'
-            }
-          }
-          onChange={event => setCPF(event.target.value)}
-          fullWidth
-          type="text"
-          error={errors.hasOwnProperty('cpf')}
-          helperText={errors.hasOwnProperty('cpf') ? errors.cpf : null}
-          value={cpf}
-        />
-      </FormControl> */}
-
       <Grid container spacing={1} justifyContent="flex-end">
         <Grid item xs={12} md={6}>
           <FormControl fullWidth>
