@@ -45,7 +45,6 @@ const Login = (props) => {
             loading.close()
             return isLoaded
         } catch (err) {
-            console.log(err)
             loading.close()
             return false
         }
@@ -65,7 +64,6 @@ const Login = (props) => {
                     history.push('/dashboard')
                 }
             } catch (err) {
-                console.log(err)
                 if ([401, 403].indexOf(err.code) > -1) {
                     await userAuth.refreshTokens()
                         .then(() => {

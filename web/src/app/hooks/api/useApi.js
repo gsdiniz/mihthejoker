@@ -15,7 +15,6 @@ export default function useApi(apiObject) {
           }
         })
         .catch(err => {
-          console.log(err)
           history.push('/login')
         }) 
     })

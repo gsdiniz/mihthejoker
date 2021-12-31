@@ -28,7 +28,6 @@ module.exports = (expressApp) => {
         const movieFile = `${expressApp.appConfig.uploadPath}/${expositor}/${video}`;
         fs.stat(movieFile, (err, stats) => {
           if (err) {
-            console.log(err);
             return res.status(404).end();
           }
           const { range } = req.headers;

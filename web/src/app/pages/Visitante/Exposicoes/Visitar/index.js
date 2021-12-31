@@ -27,12 +27,10 @@ const Main = (props) => {
       loading.open()
       api.fetch('visitar')
       .then(resp => {
-        console.log(resp)
         setExpoLista(resp)
         loading.close()
       })
       .catch(err => {
-        console.log(err)
         loading.close()
       })
     },[loading, api])

@@ -107,7 +107,6 @@ const Exposicao = (props) => {
   const handleEditar = (exercicio) => {
     setExercicio(exercicio)
     setOpenUpsertDialog(true)
-    console.log(exercicio)
   }
 
   const handleExcluir = (exercicio) => {

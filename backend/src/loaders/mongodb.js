@@ -15,7 +15,6 @@ module.exports.disconnect = async (cb) => {
 
 module.exports.connect = async () => {
   const uri = `${config.mongodb.schema}://${config.mongodb.user}:${config.mongodb.pass}@${config.mongodb.port ? config.mongodb.host + ':' + config.mongodb.port : config.mongodb.host}`
-  console.log(uri)
   mongoose.connection.on('connected', function () {
     LOG.registerInfo('Mongoose! Conectado')
   })
