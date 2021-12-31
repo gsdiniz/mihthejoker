@@ -53,6 +53,10 @@ module.exports = (expressApp) => {
         }
         const newUser = await this.service.buildUsuario(body)
         const userCreated = await this.service.createUser(newUser)
+        expressApp.helpers.emails
+          .sendVerifyEmail(`${req.header('X-Forwarded-Prefix')}/v1/user/verifyEmail/`,
+            userCreated.email,
+            jwt.sign({email: userCreated.email}, expressApp.appConfig.jwtSecret))
 
         res
           .status(201)

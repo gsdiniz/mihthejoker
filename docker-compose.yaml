@@ -47,10 +47,10 @@ services:
     build: 
       context: ./backend
     environment: 
-      NODE_ENV: ${NODE_ENV}
+      NODE_ENV: ${NODE_ENV:-development}
       CORS: ${CORS:-*}
       PORT: 8081
-      HOST: http://localhost:8090/api
+      HOST: http://localhost:8090
       MAIL_FROM: ${MAIL_FROM:-no-reply@muse.com}
       MAIL_PORT: ${MAIL_PORT:-1025}
       MAIL_HOST: ${MAIL_HOST:-mihhTheJoker-mailhog}
@@ -77,7 +77,7 @@ services:
       - mihhTheJoker-backend
     container_name: mihhTheJoker-web
     environment: 
-      NODE_ENV: ${NODE_ENV}
+      NODE_ENV: ${NODE_ENV:-development}
       API: http://localhost:8090/api/v1
     volumes: 
       - ${PWD}/web/src:/usr/share/nginx/html/src

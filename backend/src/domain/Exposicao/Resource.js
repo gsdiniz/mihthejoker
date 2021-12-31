@@ -107,7 +107,7 @@ module.exports = (expressApp) => {
     }
 
     async handlePut (req, res, next) {
-      const body = req.body
+      let body = {}
       try {
         this._verifyOwnPermissions(req)
         const errors = validationResult(req);
@@ -116,8 +116,12 @@ module.exports = (expressApp) => {
           return this._returnValidationErrors(res, expressApp.helpers.error.BadRequest.CODE, errors.array())
         }
 
-        const created = await this.service.update(req.params.id, body)
-        res.status(200).send(created)
+        if  (!req.file) {
+          body = Object.assign({...req.body}, { videoURL: `/${req.file.filename}`, expositor: req.user._id })
+        }
+
+        const updated = await this.service.update(req.params.id, body)
+        res.status(200).send(updated)
       } catch (err) {
         if (err.errors) {
           let reportErrors = {}

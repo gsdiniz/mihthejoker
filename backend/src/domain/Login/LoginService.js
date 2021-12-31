@@ -10,8 +10,6 @@ module.exports = (expressApp) => {
       this.userRepository = userRepository
       this.allowListRepository = allowListRepository
       this.blockListRepository = blockListRepository
-      this.jwtSecret = expressApp.appConfig.jwtSecret
-      this.mailService = expressApp.helpers.emails
     }
   
     async accessTokenHashFromDB (token) {
@@ -64,19 +62,18 @@ module.exports = (expressApp) => {
   
     async createUser (user) {
       const emailCadastrado = await this.userRepository.findByEmail(user.email)
-  
+
       if (emailCadastrado) {
         throw new expressApp.helpers.error.NotAcceptable(`Usuário já cadastrado com esse email`)
       }
-  
+
       const newUser = await this.userRepository.create(user)
-      this.mailService.sendVerifyEmail(`/v1/user/verifyEmail/`, newUser.email, jwt.sign({email: newUser.email}, this.jwtSecret))
       delete newUser.password
       return newUser
     }
   
     async criaTokens (payload) {
-      const accessToken = jwt.sign(payload, this.jwtSecret, { expiresIn: '15m' });
+      const accessToken = jwt.sign(payload, expressApp.appConfig.jwtSecret, { expiresIn: '15m' });
       const refreshToken = crypto.randomBytes(24).toString('hex')
       const hashedToken = hashToken(refreshToken)
       const user = payload.id

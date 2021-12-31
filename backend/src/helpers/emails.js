@@ -3,7 +3,6 @@ const config = require('../config')
 const LOG = require('../loaders/winston')
 
 const getTransport = async () =>  {
-  console.log(config.mail)
   const configTransport = Object.assign({}, config.mail, { auth: JSON.parse(config.mail.auth)})
   delete configTransport.from
 

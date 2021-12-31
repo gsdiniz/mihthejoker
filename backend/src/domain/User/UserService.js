@@ -57,19 +57,18 @@ module.exports = (expressApp, ResetPasswordTokenRepository) => {
       return password.localeCompare(confirm_password) == 0
     }
 
-    async sendMailRecoverPassword (email) {
-      try {
-        const user = await this.getByEmail(email)
-        expressApp.logger.registerInfo(user)
-        if (user) {
-          const token = hashToken(crypto.randomBytes(24).toString('hex'))
-          const expires_at = new Date(Date.now() + (5 * 60 * 1000))
-          await this.resetTokenRepository.deleteByUser(user._id)
-          await this.resetTokenRepository.create(token, user._id, expires_at)
-          this.mailService.sendResetPassword(`/reset-password/`, user.email, token)
-        }
+    async createResetPasswordToken (email) {
+      const user = await this.getByEmail(email)
+      const token = hashToken(crypto.randomBytes(24).toString('hex'))
+      const expires_at = new Date(Date.now() + (5 * 60 * 1000))
+      await this.resetTokenRepository.deleteByUser(user._id)
+      await this.resetTokenRepository.create(token, user._id, expires_at)
+      return token
+    }
 
-        return user
+    async sendMailRecoverPassword (url, email, token) {
+      try {
+          this.mailService.sendResetPassword(url, email, token)
       } catch (err) {
         throw err
       }

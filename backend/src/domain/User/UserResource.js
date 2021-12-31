@@ -45,7 +45,8 @@ module.exports = (expressApp) => {
           return this._returnValidationErrors(res, expressApp.helpers.error.BadRequest.CODE, errors.array())
         }
 
-        await this.service.sendMailRecoverPassword(req.body.email)
+        const tokenRecoverToken = createResetPasswordToken(req.body.email);
+        await this.service.sendMailRecoverPassword(`/reset-password`, req.body.email, tokenRecoverToken)
         res.status(200).send({ mensagem: msgEnvio.replace('[email]', req.body.email)})
       } catch (err) {
         next(err)
